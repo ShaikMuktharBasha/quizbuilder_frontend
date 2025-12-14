@@ -27,7 +27,7 @@ export default function Login() {
         if (result.role === "creator") {
           navigate("/creator");
         } else {
-          navigate("/participant");
+          navigate("/participant-dashboard");
         }
       } else {
         alert("Login failed");

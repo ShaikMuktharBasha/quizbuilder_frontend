@@ -66,11 +66,12 @@ const handleSubmit = async () => {
     // ✅ Build map of answers { questionId: selectedAnswer }
     const mappedAnswers = {};
     activeQuiz.questions.forEach((q) => {
-      mappedAnswers[q.id] = answers[q.id] || "";
+      const qId = q.id || q._id;
+      mappedAnswers[qId] = answers[qId] || "";
     });
 
     // 🔍 Debug logs
-    console.log("👉 Questions:", activeQuiz.questions.map(q => ({ id: q.id, text: q.questionText })));
+    console.log("👉 Questions:", activeQuiz.questions.map(q => ({ id: q.id || q._id, text: q.questionText })));
     console.log("👉 Selected answers object:", answers);
     console.log("👉 Payload to send:", { userId, answers: mappedAnswers });
 
@@ -103,9 +104,16 @@ const handleSubmit = async () => {
 
       {/* STEP 1: Start button */}
       {step === "start" && (
-        <button className="main-start-btn" onClick={() => loadAllQuizzes()}>
-          Start Quiz
-        </button>
+        <div className="start-step">
+          <button className="main-start-btn" onClick={() => loadAllQuizzes()}>
+            Start Quiz
+          </button>
+          <div style={{ marginTop: '20px' }}>
+            <button className="back-btn" onClick={() => navigate("/participant-dashboard")}>
+              Back to Dashboard
+            </button>
+          </div>
+        </div>
       )}
 
       {/* STEP 2: Quizzes list */}
@@ -116,7 +124,7 @@ const handleSubmit = async () => {
           {quizzes.map((q) => (
             <div key={q.id} className="quiz-card">
               <h3>{q.title}</h3>
-              <p>Time Limit: {q.timeLimit} mins</p>
+              <p>Time Limit: {q.timeLimit || "N/A"} mins</p>
               {attemptedQuizIds.includes(q.id) ? (
                 <button className="disabled-btn" disabled>
                   Already Attempted
@@ -128,55 +136,63 @@ const handleSubmit = async () => {
               )}
             </div>
           ))}
-          <button className="back-btn" onClick={() => setStep("domains")}>
-            ← Back to Domains
+          <button className="back-btn" onClick={() => setStep("start")}>
+            ← Back
           </button>
         </div>
       )}
 
-     {/* STEP 4: Active Quiz */}
-{step === "active" && activeQuiz && (
-  <div className="quiz-box">
-    <h2>{activeQuiz.title}</h2>
-    {timeLeft !== null && (
-      <p className="timer">Time left: {formatTime(timeLeft)}</p>
-    )}
-    {activeQuiz.questions.length === 0 ? (
-      <p>No questions available for this quiz yet.</p>
-    ) : (
-      activeQuiz.questions.map((q) => {
-        const options = [q.optionA, q.optionB, q.optionC, q.optionD];
-        return (
-          <div key={q.id} className="quiz-question">
-            <p>{q.questionText}</p>
-            {options.map((opt, i) => {
-              const optionKey = String.fromCharCode(65 + i); // "A", "B", "C", "D"
-              return (
-                <label key={i}>
-                  <input
-                    type="radio"
-                    name={`q-${q.id}`}
-                    value={optionKey}   // ✅ send "A", "B", "C", or "D"
-                    checked={answers[q.id] === optionKey}
-                    onChange={() =>
-                      setAnswers({ ...answers, [q.id]: optionKey })
-                    }
-                  />
-                  {optionKey}. {opt}
-                </label>
-              );
-            })}
+      {/* STEP 4: Active Quiz */}
+      {step === "active" && activeQuiz && (
+        <div className="quiz-box">
+          <div className="quiz-header">
+            <button className="back-btn-small" onClick={() => setStep("quizzes")}>
+              ← Back
+            </button>
+            <h2>{activeQuiz.title}</h2>
+            {timeLeft !== null && (
+              <p className="timer">Time left: {formatTime(timeLeft)}</p>
+            )}
           </div>
-        );
-      })
-    )}
-    {activeQuiz.questions.length > 0 && (
-      <button onClick={handleSubmit} className="submit-btn">
-        Submit Quiz
-      </button>
-    )}
-  </div>
-)}
+
+          {activeQuiz.questions.length === 0 ? (
+            <p>No questions available for this quiz yet.</p>
+          ) : (
+            activeQuiz.questions.map((q) => {
+              const qId = q.id || q._id;
+              const options = [q.optionA, q.optionB, q.optionC, q.optionD];
+              return (
+                <div key={qId} className="quiz-question">
+                  <p className="question-text">{q.questionText}</p>
+                  <div className="options-grid">
+                    {options.map((opt, i) => {
+                      const optionKey = String.fromCharCode(65 + i); // "A", "B", "C", "D"
+                      const isSelected = answers[qId] === optionKey;
+                      return (
+                        <div
+                          key={i}
+                          className={`option-card ${isSelected ? "selected" : ""}`}
+                          onClick={() =>
+                            setAnswers({ ...answers, [qId]: optionKey })
+                          }
+                        >
+                          <span className="option-key">{optionKey}</span>
+                          <span className="option-text">{opt}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })
+          )}
+          {activeQuiz.questions.length > 0 && (
+            <button onClick={handleSubmit} className="submit-btn">
+              Submit Quiz
+            </button>
+          )}
+        </div>
+      )}
 
       {/* STEP 5: Result */}
       {step === "result" && result && (
@@ -185,7 +201,10 @@ const handleSubmit = async () => {
           <p>
             You scored <b>{result.score}</b> out of {result.total}
           </p>
-          <button onClick={() => setStep("domains")}>Back to Domains</button>
+          <button onClick={() => setStep("quizzes")}>Back to Quizzes</button>
+          <button onClick={() => navigate("/participant-dashboard")}>
+            Back to Dashboard
+          </button>
         </div>
       )}
     </div>

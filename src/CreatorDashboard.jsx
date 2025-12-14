@@ -21,7 +21,7 @@ export default function CreatorDashboard() {
         <div className="header-right">
           <span className="user-name">{username}</span>
           <button className="logout-btn" onClick={handleLogout}>
-            🚪 Sign Out
+            Sign Out
           </button>
         </div>
       </header>

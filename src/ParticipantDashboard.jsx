@@ -1,17 +1,37 @@
 // ParticipantDashboard.jsx
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { getMyResults } from "./api";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import "./ParticipantDashboard.css";
 
 export default function ParticipantDashboard() {
   const navigate = useNavigate();
   const username = localStorage.getItem("username");
   const email = localStorage.getItem("email");
+  const userId = localStorage.getItem("userId");
+
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    if (userId) {
+      getMyResults(userId)
+        .then(data => setResults(data))
+        .catch(err => console.error("Failed to fetch results:", err));
+    }
+  }, [userId]);
 
   const handleLogout = () => {
     localStorage.clear();
     navigate("/");
   };
+
+  // Prepare data for chart
+  const chartData = results.map(r => ({
+    name: r.quizTitle || "Quiz",
+    score: r.score,
+    total: r.total
+  }));
 
   return (
     <div className="participant-dashboard">
@@ -21,7 +41,7 @@ export default function ParticipantDashboard() {
         <div className="header-right">
           <span className="user-name">{username}</span>
           <button className="logout-btn" onClick={handleLogout}>
-            🚪 Sign Out
+            Sign Out
           </button>
         </div>
       </header>
@@ -53,6 +73,36 @@ export default function ParticipantDashboard() {
           <h3>My Results</h3>
           <p>Check your past performance and track your progress.</p>
           <button onClick={() => navigate("/my-results")}>View Results</button>
+        </div>
+
+        {/* Performance Chart */}
+        <div className="chart-section">
+          <h3>Performance Overview</h3>
+          {results.length > 0 ? (
+            <div style={{ width: '100%', height: 300 }}>
+              <ResponsiveContainer width="100%" height="100%">
+                <BarChart
+                  data={chartData}
+                  margin={{
+                    top: 5,
+                    right: 30,
+                    left: 20,
+                    bottom: 5,
+                  }}
+                >
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" stroke="#fff" />
+                  <YAxis stroke="#fff" />
+                  <Tooltip />
+                  <Legend />
+                  <Bar dataKey="score" fill="#8884d8" name="Score" />
+                  <Bar dataKey="total" fill="#82ca9d" name="Total Questions" />
+                </BarChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <p style={{ color: '#fff' }}>No quiz data available yet.</p>
+          )}
         </div>
 
         {/* About Participant */}
