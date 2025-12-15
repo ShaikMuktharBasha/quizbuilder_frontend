@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./CreateQuiz.css";
-import { createQuiz } from "./api";
+import { createQuiz, generateQuizQuestions } from "./api";
 import QuizChatbot from "./QuizChatbot";
 
 export default function CreateQuiz() {
@@ -25,6 +25,36 @@ export default function CreateQuiz() {
 
   // Saved quiz response
   const [savedQuiz, setSavedQuiz] = useState(null);
+
+  // AI Generation State
+  const [aiTopic, setAiTopic] = useState("");
+  const [aiDifficulty, setAiDifficulty] = useState("Medium");
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  const handleGenerate = async () => {
+    if (!aiTopic) {
+      alert("Please enter a topic for AI generation!");
+      return;
+    }
+    setIsGenerating(true);
+    try {
+      const generatedQuestions = await generateQuizQuestions(aiTopic, aiDifficulty, 5);
+      // Map backend format to frontend format
+      const formattedQuestions = generatedQuestions.map(q => ({
+        text: q.questionText,
+        options: [q.optionA, q.optionB, q.optionC, q.optionD],
+        answer: q.correctOption,
+        explanation: q.explanation
+      }));
+      setQuestions([...questions, ...formattedQuestions]);
+      alert("Questions generated successfully!");
+    } catch (error) {
+      console.error("Error generating questions:", error);
+      alert("Failed to generate questions. Please try again.");
+    } finally {
+      setIsGenerating(false);
+    }
+  };
 
   const handleQuizChange = (e) => {
     setQuiz({ ...quiz, [e.target.name]: e.target.value });
@@ -93,7 +123,8 @@ export default function CreateQuiz() {
         optionB: q.options[1] || "",
         optionC: q.options[2] || "",
         optionD: q.options[3] || "",
-        correctOption: q.answer
+        correctOption: q.answer,
+        explanation: q.explanation || ""
       }))
     };
 
@@ -139,6 +170,29 @@ export default function CreateQuiz() {
       {/* Step 2: Add/Edit Questions */}
       {step === 2 && (
         <div className="quiz-questions">
+          {/* AI Generation Section */}
+          <div className="ai-generation-section" style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
+            <h3>🤖 Auto-Generate Questions with Gemini AI</h3>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+              <input 
+                type="text" 
+                placeholder="Enter Topic (e.g., Java OOP)" 
+                value={aiTopic}
+                onChange={(e) => setAiTopic(e.target.value)}
+                style={{ flex: 1 }}
+              />
+              <select value={aiDifficulty} onChange={(e) => setAiDifficulty(e.target.value)}>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+              </select>
+              <button onClick={handleGenerate} disabled={isGenerating}>
+                {isGenerating ? "Generating..." : "Generate"}
+              </button>
+            </div>
+            <small>Generates 5 questions automatically.</small>
+          </div>
+
           <label>Question:</label>
           <input
             type="text"

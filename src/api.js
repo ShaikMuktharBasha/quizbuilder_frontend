@@ -46,6 +46,12 @@ export async function getMyQuizzes(userId) {
   return res.data;
 }
 
+// Generate Quiz Questions with AI
+export async function generateQuizQuestions(topic, difficulty, count) {
+  const res = await axios.post(`${QUIZ_API_URL}/generate`, { topic, difficulty, count });
+  return res.data;
+}
+
 // Delete quiz
 export async function deleteQuiz(quizId) {
   await axios.delete(`${QUIZ_API_URL}/${quizId}`);
