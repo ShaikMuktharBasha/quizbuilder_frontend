@@ -50,7 +50,8 @@ export default function CreateQuiz() {
       alert("Questions generated successfully!");
     } catch (error) {
       console.error("Error generating questions:", error);
-      alert("Failed to generate questions. Please try again.");
+      const errorMessage = error.response?.data?.error || error.message || "Unknown error";
+      alert(`Failed to generate questions: ${errorMessage}`);
     } finally {
       setIsGenerating(false);
     }
