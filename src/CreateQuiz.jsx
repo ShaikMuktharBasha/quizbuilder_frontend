@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./CreateQuiz.css";
 import { createQuiz } from "./api";
+import QuizChatbot from "./QuizChatbot";
 
 export default function CreateQuiz() {
   const [step, setStep] = useState(1);
@@ -273,6 +274,14 @@ export default function CreateQuiz() {
           </button>
         </div>
       )}
+
+      <QuizChatbot 
+        quiz={quiz} 
+        setQuiz={setQuiz} 
+        questions={questions} 
+        setQuestions={setQuestions}
+        setStep={setStep}
+      />
     </div>
   );
 }
