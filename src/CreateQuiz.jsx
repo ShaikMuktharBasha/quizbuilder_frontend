@@ -173,20 +173,28 @@ export default function CreateQuiz() {
           {/* AI Generation Section */}
           <div className="ai-generation-section" style={{ marginBottom: '20px', padding: '15px', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: '#f9f9f9' }}>
             <h3>🤖 Auto-Generate Questions with Gemini AI</h3>
-            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '10px', alignItems: 'center' }}>
               <input 
                 type="text" 
                 placeholder="Enter Topic (e.g., Java OOP)" 
                 value={aiTopic}
                 onChange={(e) => setAiTopic(e.target.value)}
-                style={{ flex: 1 }}
+                style={{ flex: 1, marginBottom: 0, width: 'auto' }}
               />
-              <select value={aiDifficulty} onChange={(e) => setAiDifficulty(e.target.value)}>
+              <select 
+                value={aiDifficulty} 
+                onChange={(e) => setAiDifficulty(e.target.value)}
+                style={{ width: '150px', marginBottom: 0, flex: 'none' }}
+              >
                 <option value="Easy">Easy</option>
                 <option value="Medium">Medium</option>
                 <option value="Hard">Hard</option>
               </select>
-              <button onClick={handleGenerate} disabled={isGenerating}>
+              <button 
+                onClick={handleGenerate} 
+                disabled={isGenerating}
+                style={{ width: 'auto', marginBottom: 0, flex: 'none', padding: '16px 24px' }}
+              >
                 {isGenerating ? "Generating..." : "Generate"}
               </button>
             </div>
