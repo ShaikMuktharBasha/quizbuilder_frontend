@@ -41,6 +41,9 @@ export default function Login() {
 
   return (
     <div className="login-page">
+      <button className="go-back-btn" onClick={() => navigate("/welcome")} title="Go Back">
+        ←
+      </button>
       <div className="login-wrapper">
         {/* Left Side - Landing Content */}
         <div className="landing-section">

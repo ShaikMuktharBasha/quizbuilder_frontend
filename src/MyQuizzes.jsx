@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { getMyQuizzes, deleteQuiz } from "./api";
 import "./MyQuizzes.css";
 
 export default function MyQuizzes() {
+  const navigate = useNavigate();
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedQuiz, setSelectedQuiz] = useState(null);
@@ -38,6 +40,9 @@ export default function MyQuizzes() {
 
   return (
     <div className="my-quizzes">
+      <button className="go-back-btn" onClick={() => navigate("/creator")} title="Go Back">
+        ←
+      </button>
       <h2>📚 My Quizzes</h2>
 
       {loading && <p>Loading quizzes...</p>}

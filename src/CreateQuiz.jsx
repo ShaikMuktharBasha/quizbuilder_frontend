@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./CreateQuiz.css";
 import { createQuiz } from "./api";
 import QuizChatbot from "./QuizChatbot";
 
 export default function CreateQuiz() {
+  const navigate = useNavigate();
   const [step, setStep] = useState(1);
 
   // Quiz details
@@ -112,6 +114,9 @@ export default function CreateQuiz() {
 
   return (
     <div className="create-quiz">
+      <button className="go-back-btn" onClick={() => navigate("/creator")} title="Go Back">
+        ←
+      </button>
       <h2>Create Quiz</h2>
 
       {/* Step 1: Quiz Details */}

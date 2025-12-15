@@ -42,10 +42,10 @@ export default function MyResults() {
 
   return (
     <div className="results-container">
+      <button className="go-back-btn" onClick={() => navigate("/participant-dashboard")} title="Go Back">
+        ←
+      </button>
       <div className="results-header-box">
-        <button className="back-btn" onClick={() => navigate("/participant-dashboard")}>
-            ← Back to Dashboard
-        </button>
         <h1 className="results-header">My Quiz Results</h1>
       </div>
 

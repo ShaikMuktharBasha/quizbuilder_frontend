@@ -42,6 +42,9 @@ export default function SignupPage() {
 
   return (
     <div className="signup-page">
+      <button className="go-back-btn" onClick={() => navigate("/welcome")} title="Go Back">
+        ←
+      </button>
       <div className="signup-container">
         <div className="signup-header">
           <h1>Create Account</h1>

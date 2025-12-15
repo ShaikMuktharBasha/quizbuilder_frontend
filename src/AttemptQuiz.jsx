@@ -100,6 +100,9 @@ const handleSubmit = async () => {
 
   return (
     <div className="attempt-container">
+      <button className="go-back-btn" onClick={() => navigate("/participant-dashboard")} title="Go Back">
+        ←
+      </button>
       <h1 className="title">Attempt Quiz</h1>
 
       {/* STEP 1: Start button */}
