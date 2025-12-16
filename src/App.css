@@ -34,6 +34,18 @@ body {
   transform: translateY(-50%);
 }
 
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.app-logo {
+  height: 3.5rem;
+  width: auto;
+}
+
 .logo {
   font-size: 3.5rem;
   font-weight: 800;

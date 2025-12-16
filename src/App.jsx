@@ -10,7 +10,10 @@ export default function App() {
     <div className="app-container">
       {/* Header */}
       <header className="header">
-        <h1 className="logo">Quiz Builder</h1>
+        <div className="logo-container">
+          <img src="/q-logo.png" alt="Quiz Builder Logo" className="app-logo" />
+          <h1 className="logo">Quiz Builder</h1>
+        </div>
         <div className="header-actions">
           <ThemeToggle />
         </div>
