@@ -28,6 +28,7 @@ export default function CreatorDashboard() {
   const [activeTab, setActiveTab] = useState("quizzes");
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [showActive, setShowActive] = useState(true);
 
   useEffect(() => {
     if (activeTab === "quizzes") {
@@ -150,9 +151,9 @@ export default function CreatorDashboard() {
               </div>
 
               <div className="controls-bar">
-                <div className="toggle-group">
-                    <div className="toggle-switch">
-                        <div className="switch on"></div>
+                <div className="toggle-group" onClick={() => setShowActive(!showActive)} style={{cursor: 'pointer'}}>
+                    <div className={`toggle-switch ${showActive ? '' : 'off'}`}>
+                        <div className={`switch ${showActive ? 'on' : ''}`}></div>
                     </div>
                     <span>Show Active</span>
                 </div>

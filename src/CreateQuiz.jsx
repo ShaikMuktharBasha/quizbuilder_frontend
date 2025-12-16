@@ -19,7 +19,8 @@ export default function CreateQuiz() {
   const [newQuestion, setNewQuestion] = useState({
     text: "",
     options: ["", "", "", ""],
-    answer: ""
+    answer: "",
+    required: true
   });
 
   // Edit state
@@ -204,9 +205,11 @@ export default function CreateQuiz() {
                 </div>
              </div>
              <div className="footer-right">
-                <div className="toggle-switch">
+                <div className="toggle-group" style={{display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer'}} onClick={() => setNewQuestion({...newQuestion, required: !newQuestion.required})}>
                     <span className="toggle-label">Required</span>
-                    <div className="switch on"></div>
+                    <div className={`toggle-switch ${newQuestion.required ? '' : 'off'}`}>
+                        <div className={`switch ${newQuestion.required ? 'on' : ''}`}></div>
+                    </div>
                 </div>
                 <div className="points-input">
                     <input type="number" defaultValue={10} /> 

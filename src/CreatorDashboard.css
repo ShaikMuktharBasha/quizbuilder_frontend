@@ -239,6 +239,7 @@ body, html, #root {
 }
 
 .toggle-switch {
+  transition: background-color 0.2s;
   width: 44px;
   height: 24px;
   background-color: var(--primary-color);
@@ -455,4 +456,8 @@ body, html, #root {
   .content-scrollable {
     padding: 16px;
   }
+}
+
+.toggle-switch.off {
+  background-color: #cbd5e1;
 }
