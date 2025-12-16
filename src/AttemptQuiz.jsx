@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getAllQuizzes, getMyResults, submitQuiz } from "./api";
 import { useNavigate } from "react-router-dom";
 import "./AttemptQuiz.css";
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function AttemptQuiz() {
   const [step, setStep] = useState("start"); // start → domains → quizzes → active → result
@@ -102,6 +103,9 @@ const handleSubmit = async () => {
 
   return (
     <div className="attempt-container">
+      <div className="theme-toggle-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 10 }}>
+        <ThemeToggle />
+      </div>
       <button className="go-back-btn" onClick={() => navigate("/participant-dashboard")} title="Go Back">
         ←
       </button>

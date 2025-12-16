@@ -20,6 +20,7 @@ import {
 import "./CreatorDashboard.css";
 import { getMyQuizzes } from "./api";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function CreatorDashboard() {
   const navigate = useNavigate();
@@ -141,6 +142,7 @@ export default function CreatorDashboard() {
             <ChevronDown size={14} />
           </div>
           <div className="header-actions">
+            <ThemeToggle />
             <button className="icon-btn"><Search size={20} /></button>
             <button className="icon-btn"><Bell size={20} /></button>
             <div className="user-avatar">{username.charAt(0).toUpperCase()}</div>

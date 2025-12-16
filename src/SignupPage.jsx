@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signup } from "./api";
 import "./SignupPage.css";
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function SignupPage() {
   const [formData, setFormData] = useState({
@@ -42,6 +43,9 @@ export default function SignupPage() {
 
   return (
     <div className="signup-page">
+      <div className="theme-toggle-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 10 }}>
+        <ThemeToggle />
+      </div>
       <button className="go-back-btn" onClick={() => navigate("/welcome")} title="Go Back">
         ←
       </button>

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./CreateQuiz.css";
 import { createQuiz } from "./api";
 import QuizChatbot from "./QuizChatbot";
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function CreateQuiz() {
   const navigate = useNavigate();
@@ -115,6 +116,9 @@ export default function CreateQuiz() {
 
   return (
     <div className="create-quiz">
+      <div className="theme-toggle-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 10 }}>
+        <ThemeToggle />
+      </div>
       <button className="go-back-btn" onClick={() => navigate("/creator")} title="Go Back">
         ←
       </button>

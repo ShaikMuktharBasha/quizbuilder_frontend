@@ -1,6 +1,7 @@
 import React from "react";
 import "./App.css";
 import { useNavigate } from "react-router-dom";
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function App() {
   const navigate = useNavigate();
@@ -10,6 +11,9 @@ export default function App() {
       {/* Header */}
       <header className="header">
         <h1 className="logo">Quiz Builder</h1>
+        <div className="header-actions">
+          <ThemeToggle />
+        </div>
       </header>
 
       {/* Body Section */}

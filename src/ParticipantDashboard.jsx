@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { getMyResults } from "./api";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import "./ParticipantDashboard.css";
+import ThemeToggle from "./components/ThemeToggle";
 
 export default function ParticipantDashboard() {
   const navigate = useNavigate();
@@ -39,6 +40,7 @@ export default function ParticipantDashboard() {
       <header className="dashboard-header">
         <h2>Hello, Participant </h2>
         <div className="header-right">
+          <ThemeToggle />
           <span className="user-name">{username}</span>
           <button className="logout-btn" onClick={handleLogout}>
             Sign Out

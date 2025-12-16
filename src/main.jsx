@@ -13,22 +13,26 @@ import AttemptQuiz from "./AttemptQuiz";
 import MyResults from "./MyResults";
 import LoginPage from "./LoginPage";
 import SignupPage from "./SignupPage";
+import { ThemeProvider } from "./context/ThemeContext";
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <Router>
-      <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
-        <Route path="/welcome" element={<App />} />
-        <Route path="/creator" element={<CreatorDashboard />} />
-        <Route path="/participant-dashboard" element={<ParticipantDashboard />} />
-        <Route path="/create-quiz" element={<CreateQuiz />} /> 
-        <Route path="/my-quizzes" element={<MyQuizzes />} />
-        <Route path="/attempt-quiz" element={<AttemptQuiz />} />
-        <Route path="/my-results" element={<MyResults />} />
+    <ThemeProvider>
+      <Router>
+        <Routes>
+          <Route path="/" element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/welcome" element={<App />} />
+          <Route path="/creator" element={<CreatorDashboard />} />
+          <Route path="/participant-dashboard" element={<ParticipantDashboard />} />
+          <Route path="/create-quiz" element={<CreateQuiz />} /> 
+          <Route path="/my-quizzes" element={<MyQuizzes />} />
+          <Route path="/attempt-quiz" element={<AttemptQuiz />} />
+          <Route path="/my-results" element={<MyResults />} />
 
-      </Routes>
-    </Router>
+        </Routes>
+      </Router>
+    </ThemeProvider>
   </StrictMode>
 );
