@@ -103,7 +103,7 @@ const handleSubmit = async () => {
 
   return (
     <div className="attempt-container">
-      <div className="theme-toggle-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 10 }}>
+      <div className="theme-toggle-absolute">
         <ThemeToggle />
       </div>
       <button className="go-back-btn" onClick={() => navigate("/participant-dashboard")} title="Go Back">

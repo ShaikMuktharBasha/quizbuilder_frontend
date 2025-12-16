@@ -42,7 +42,7 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      <div className="theme-toggle-wrapper" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 10 }}>
+      <div className="theme-toggle-absolute">
         <ThemeToggle />
       </div>
       <button className="go-back-btn" onClick={() => navigate("/welcome")} title="Go Back">

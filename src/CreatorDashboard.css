@@ -179,16 +179,16 @@ body, html, #root {
 }
 
 .user-avatar {
-  width: 32px;
-  height: 32px;
-  background-color: #f3f4f6;
+  width: 40px;
+  height: 40px;
+  background-color: var(--bg-hover);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   color: var(--text-primary);
-  font-size: 14px;
+  font-size: 16px;
   border: 1px solid var(--border-color);
 }
 

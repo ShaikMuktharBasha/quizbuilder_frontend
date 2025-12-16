@@ -8,14 +8,12 @@ import {
   BarChart2, 
   LogOut, 
   User, 
-  Bell, 
   Plus, 
   Eye, 
   Edit, 
   Trash2, 
   CheckCircle,
-  ChevronDown,
-  Search
+  ChevronDown
 } from "lucide-react";
 import "./CreatorDashboard.css";
 import { getMyQuizzes } from "./api";
@@ -143,8 +141,6 @@ export default function CreatorDashboard() {
           </div>
           <div className="header-actions">
             <ThemeToggle />
-            <button className="icon-btn"><Search size={20} /></button>
-            <button className="icon-btn"><Bell size={20} /></button>
             <div className="user-avatar">{username.charAt(0).toUpperCase()}</div>
           </div>
         </header>
