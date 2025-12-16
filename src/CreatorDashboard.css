@@ -516,3 +516,17 @@ body, html, #root {
   outline: none;
   border-color: var(--primary-color);
 }
+
+/* View Containers */
+.statistics-view,
+.settings-view,
+.flashcards-view {
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.chart-section {
+  width: 100%;
+  box-sizing: border-box;
+}
