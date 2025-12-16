@@ -175,7 +175,7 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
   if (!isOpen) {
     return (
       <button className="chatbot-toggle" onClick={() => setIsOpen(true)}>
-        💬
+        <span role="img" aria-label="chat">💬</span>
       </button>
     );
   }
@@ -183,13 +183,32 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
   return (
     <div className="chatbot-container">
       <div className="chatbot-header">
-        <h3>Quiz Assistant</h3>
-        <button className="close-btn" onClick={() => setIsOpen(false)}>×</button>
+        <div className="header-info">
+            <div className="bot-avatar-header">
+                <span role="img" aria-label="robot">🤖</span>
+                <div className="online-indicator"></div>
+            </div>
+            <div className="header-text">
+                <h3>LeadBot</h3>
+                <span className="status">Online Now</span>
+            </div>
+        </div>
+        <div className="header-actions">
+            <button className="icon-btn">•••</button>
+            <button className="close-btn" onClick={() => setIsOpen(false)}>×</button>
+        </div>
       </div>
       <div className="chatbot-messages">
         {messages.map((msg, idx) => (
-          <div key={idx} className={`message ${msg.sender}`}>
-            {msg.text}
+          <div key={idx} className={`message-wrapper ${msg.sender}`}>
+            {msg.sender === 'bot' && (
+                <div className="bot-avatar-message">
+                    <span role="img" aria-label="robot">🤖</span>
+                </div>
+            )}
+            <div className={`message ${msg.sender}`}>
+              {msg.text}
+            </div>
           </div>
         ))}
         <div ref={messagesEndRef} />
@@ -200,9 +219,11 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-          placeholder="Type here..."
+          placeholder="Reply to LeadBot..."
         />
-        <button onClick={handleSend}>Send</button>
+        <div className="branding">
+            We're ⚡ by Drift
+        </div>
       </div>
     </div>
   );
