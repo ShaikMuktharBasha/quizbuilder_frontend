@@ -3,7 +3,7 @@
   min-height: 100vh;
   margin: 0;
   padding: 40px 20px;
-  background-color: #ffffff;
+  background-color: var(--bg-primary);
   font-family: 'Inter', sans-serif;
   display: flex;
   flex-direction: column;
@@ -19,7 +19,7 @@
 
 /* ---------- Quiz Box Centered ---------- */
 .quiz-box-centered {
-  background: white;
+  background: var(--bg-secondary);
   border-radius: 16px;
   padding: 40px;
   width: 100%;
@@ -57,13 +57,13 @@
   font-weight: 600;
   color: var(--text-secondary);
   font-size: 14px;
-  background: white;
+  background: var(--bg-primary);
 }
 
 .progress-step.active {
   border-color: var(--primary-color);
   color: var(--primary-color);
-  background-color: #eff6ff;
+  background-color: rgba(37, 99, 235, 0.1);
 }
 
 .progress-step.completed {

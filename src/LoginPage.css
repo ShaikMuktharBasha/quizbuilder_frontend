@@ -1,7 +1,7 @@
 /* Login Page */
 .login-page {
   min-height: 100vh;
-  background: #ffffff;
+  background: var(--bg-primary);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
 }
@@ -19,7 +19,7 @@
   align-items: center;
   justify-content: center;
   padding: 3rem 2rem;
-  background: #ffffff;
+  background: var(--bg-primary);
   border-right: 1px solid var(--border-color);
   position: relative;
 }
@@ -62,11 +62,11 @@
   align-items: center;
   justify-content: center;
   padding: 2rem;
-  background: #ffffff;
+  background: var(--bg-primary);
 }
 
 .login-container {
-  background: white;
+  background: var(--bg-secondary);
   border-radius: 16px;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border-color);
@@ -117,7 +117,7 @@
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.2s;
-  background: #ffffff;
+  background: var(--bg-primary);
   color: var(--text-primary);
 }
 
