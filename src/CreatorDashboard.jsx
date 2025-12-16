@@ -123,8 +123,7 @@ export default function CreatorDashboard() {
         </nav>
 
         <div className="sidebar-footer">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', padding: '0 5px' }}>
-                <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>Theme</span>
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '15px' }}>
                 <ThemeToggle />
             </div>
             <button className="logout-btn-sidebar" onClick={handleLogout}>

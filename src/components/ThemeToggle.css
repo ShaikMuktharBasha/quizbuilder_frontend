@@ -1,34 +1,93 @@
-.theme-toggle-btn {
-  background: transparent;
-  border: 1px solid var(--border-color);
-  cursor: pointer;
-  color: var(--text-primary);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+.theme-toggle-container {
   display: flex;
   align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
+  gap: 12px;
+  cursor: pointer;
+  user-select: none;
 }
 
-.theme-toggle-btn:hover {
-  background-color: var(--bg-hover);
-  transform: scale(1.05);
+.toggle-label {
+  font-size: 16px;
+  font-weight: 600;
+  color: #9ca3af; /* Gray for inactive */
+  transition: color 0.3s ease;
 }
 
-.theme-toggle-absolute {
+.toggle-label.active {
+  color: var(--text-primary);
+}
+
+/* Specific colors based on the image */
+[data-theme='light'] .toggle-label.active {
+  color: #1e293b; /* Dark blue-gray */
+}
+
+[data-theme='dark'] .toggle-label.active {
+  color: #ffffff;
+}
+
+.toggle-switch {
+  width: 56px;
+  height: 30px;
+  background-color: #60a5fa; /* Light blue */
+  border-radius: 20px;
+  position: relative;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  padding: 3px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.toggle-switch.dark {
+  background-color: #3b82f6; /* Slightly darker blue */
+}
+
+.toggle-knob {
+  width: 24px;
+  height: 24px;
+  background-color: white;
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+  z-index: 2;
+}
+
+/* Move knob to right in dark mode */
+.toggle-switch.dark .toggle-knob {
+  transform: translateX(26px);
+}
+
+/* Decorative stars/dots */
+.star {
   position: absolute;
-  top: 24px;
-  right: 24px;
-  z-index: 50;
+  background-color: white;
+  border-radius: 50%;
+  opacity: 0.8;
+  transition: all 0.3s ease;
 }
 
-body.dark-mode .theme-toggle-btn {
-  color: #fbbf24; /* Amber for Sun */
-  border-color: #fbbf24;
+.star-1 {
+  width: 4px;
+  height: 4px;
+  top: 8px;
+  right: 12px;
 }
 
-body.dark-mode .theme-toggle-btn:hover {
-  background-color: rgba(251, 191, 36, 0.1);
+.star-2 {
+  width: 3px;
+  height: 3px;
+  bottom: 6px;
+  right: 18px;
+}
+
+.toggle-switch.dark .star-1 {
+  transform: translateX(-30px);
+  opacity: 0;
+}
+
+.toggle-switch.dark .star-2 {
+  transform: translateX(-30px);
+  opacity: 0;
 }

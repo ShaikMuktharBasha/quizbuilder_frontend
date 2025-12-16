@@ -1,5 +1,4 @@
 import React from 'react';
-import { Moon, Sun } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import './ThemeToggle.css';
 
@@ -7,13 +6,16 @@ const ThemeToggle = () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <button 
-      className="theme-toggle-btn" 
-      onClick={toggleTheme} 
-      title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
-    >
-      {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
-    </button>
+    <div className="theme-toggle-container" onClick={toggleTheme}>
+      <span className={`toggle-label ${theme === 'light' ? 'active' : ''}`}>Light</span>
+      <div className={`toggle-switch ${theme}`}>
+        <div className="toggle-knob"></div>
+        {/* Decorative dots for the "sky" effect */}
+        <div className="star star-1"></div>
+        <div className="star star-2"></div>
+      </div>
+      <span className={`toggle-label ${theme === 'dark' ? 'active' : ''}`}>Dark</span>
+    </div>
   );
 };
 
