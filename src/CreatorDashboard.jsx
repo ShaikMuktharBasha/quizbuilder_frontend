@@ -123,6 +123,10 @@ export default function CreatorDashboard() {
         </nav>
 
         <div className="sidebar-footer">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', padding: '0 5px' }}>
+                <span style={{ fontSize: '14px', color: 'var(--text-secondary)' }}>Theme</span>
+                <ThemeToggle />
+            </div>
             <button className="logout-btn-sidebar" onClick={handleLogout}>
                 <LogOut size={18} />
                 <span>Sign Out</span>
@@ -140,7 +144,6 @@ export default function CreatorDashboard() {
             <ChevronDown size={14} />
           </div>
           <div className="header-actions">
-            <ThemeToggle />
             <div className="user-avatar">{username.charAt(0).toUpperCase()}</div>
           </div>
         </header>
@@ -327,7 +330,7 @@ export default function CreatorDashboard() {
                   </div>
               </div>
 
-              <div className="chart-section" style={{ marginTop: "32px", background: "white", padding: "24px", borderRadius: "12px", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-sm)" }}>
+              <div className="chart-section">
                 <h3 className="section-title">Performance Overview</h3>
                 <div style={{ width: '100%', height: 400 }}>
                   <ResponsiveContainer width="100%" height="100%">

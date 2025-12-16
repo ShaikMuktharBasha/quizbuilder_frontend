@@ -202,8 +202,8 @@ body, html, #root {
 
 /* Quizzes View */
 .quizzes-view {
-  max-width: 1000px;
-  margin: 0 auto;
+  width: 100%;
+  padding-bottom: 40px;
 }
 
 .view-header {
@@ -305,18 +305,21 @@ body, html, #root {
 
 /* Quiz Cards List */
 .quiz-cards-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .quiz-card-item {
   background: var(--bg-secondary);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
+  border-radius: 12px;
   padding: 20px;
   transition: all 0.2s;
   box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .quiz-card-item:hover {
@@ -377,7 +380,7 @@ body, html, #root {
 .quiz-info-row {
   display: flex;
   align-items: center;
-  background: #ffffff;
+  background: var(--bg-primary);
   padding: 10px 16px;
   border-radius: 6px;
   gap: 12px;
@@ -385,12 +388,12 @@ body, html, #root {
 }
 
 .quiz-info-row.success {
-  background-color: #f0fdf4; /* Very light green */
-  border: 1px solid #bbf7d0;
+  background-color: rgba(220, 252, 231, 0.2); /* Transparent green */
+  border: 1px solid rgba(187, 247, 208, 0.5);
 }
 
 .info-label {
-  background: #f3f4f6;
+  background: var(--bg-hover);
   color: var(--text-secondary);
   font-size: 12px;
   font-weight: 600;
@@ -401,8 +404,17 @@ body, html, #root {
 }
 
 .quiz-info-row.success .info-label {
-  background: #dcfce7;
+  background: rgba(220, 252, 231, 0.5);
   color: #15803d;
+}
+
+[data-theme='dark'] .quiz-info-row.success .info-label {
+  background: rgba(21, 128, 61, 0.2);
+  color: #4ade80;
+}
+
+[data-theme='dark'] .check-icon {
+  color: #4ade80;
 }
 
 .info-value {
@@ -420,7 +432,7 @@ body, html, #root {
 .dashboard-overview {
     padding: 20px;
 }
-
+var(--bg-secondary)
 .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -471,7 +483,7 @@ body, html, #root {
 }
 
 .settings-card {
-  background: white;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: 12px;
   padding: 24px;
@@ -510,6 +522,7 @@ body, html, #root {
   text-align: center;
   font-size: 1rem;
   color: var(--text-primary);
+  background: var(--bg-primary);
 }
 
 .setting-input:focus {
@@ -533,4 +546,10 @@ body, html, #root {
 .chart-section {
   width: 100%;
   box-sizing: border-box;
+  margin-top: 32px;
+  background: var(--bg-secondary);
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--shadow-sm);
 }
