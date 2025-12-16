@@ -32,8 +32,8 @@ export default function AttemptQuiz() {
     setActiveQuiz(null);
     setAnswers({});
     try {
-      const allQuizzes = await getAllQuizzes();
-      setQuizzes(allQuizzes);
+      const data = await getAllQuizzes();
+      setQuizzes(data.quizzes || (Array.isArray(data) ? data : []));
     } catch (err) {
       console.error(err);
       alert("Failed to load quizzes");
