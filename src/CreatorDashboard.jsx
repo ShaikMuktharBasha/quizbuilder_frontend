@@ -55,7 +55,7 @@ export default function CreatorDashboard() {
 
   const SidebarItem = ({ icon: Icon, label, id, active }) => (
     <div 
-      className={sidebar-item }
+      className={`sidebar-item ${active ? 'active' : ''}`}
       onClick={() => setActiveTab(id)}
     >
       <Icon size={20} />
