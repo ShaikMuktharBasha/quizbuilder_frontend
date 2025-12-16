@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { login } from "./api";
 import "./LoginPage.css";
-import ThemeToggle from "./components/ThemeToggle";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -42,12 +41,7 @@ export default function Login() {
 
   return (
     <div className="login-page">
-      <div className="theme-toggle-absolute">
-        <ThemeToggle />
-      </div>
-      <button className="go-back-btn" onClick={() => navigate("/welcome")} title="Go Back">
-        ←
-      </button>
+
       <div className="login-wrapper">
         {/* Left Side - Landing Content */}
         <div className="landing-section">
