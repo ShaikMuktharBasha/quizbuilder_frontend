@@ -518,12 +518,16 @@ body, html, #root {
 }
 
 /* View Containers */
-.statistics-view,
 .settings-view,
 .flashcards-view {
   max-width: 1000px;
   margin: 0 auto;
   width: 100%;
+}
+
+.statistics-view {
+  width: 100%;
+  max-width: 100%;
 }
 
 .chart-section {
