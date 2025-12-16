@@ -172,10 +172,35 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
     });
   };
 
+  const RobotIcon = () => (
+    <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="50" fill="#0066FF"/>
+      <path d="M50 20C50 17.2386 52.2386 15 55 15C57.7614 15 60 17.2386 60 20V28H40V20C40 17.2386 42.2386 15 45 15C47.7614 15 50 17.2386 50 20Z" fill="white"/>
+      <rect x="25" y="28" width="50" height="40" rx="10" fill="white"/>
+      <circle cx="40" cy="45" r="5" fill="#0066FF"/>
+      <circle cx="60" cy="45" r="5" fill="#0066FF"/>
+      <path d="M50 15L50 28" stroke="white" strokeWidth="4"/>
+      <circle cx="50" cy="15" r="4" fill="white"/>
+      <path d="M50 75L35 60H65L50 75Z" fill="white"/>
+    </svg>
+  );
+
+  const RobotIconSimple = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 2C13.1046 2 14 2.89543 14 4V6H10V4C10 2.89543 10.8954 2 12 2Z" fill="currentColor"/>
+        <rect x="4" y="6" width="16" height="12" rx="4" fill="currentColor"/>
+        <circle cx="9" cy="11" r="1.5" fill="white"/>
+        <circle cx="15" cy="11" r="1.5" fill="white"/>
+        <path d="M12 22L8 18H16L12 22Z" fill="currentColor"/>
+    </svg>
+  );
+
   if (!isOpen) {
     return (
       <button className="chatbot-toggle" onClick={() => setIsOpen(true)}>
-        <span role="img" aria-label="chat">💬</span>
+        <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden' }}>
+            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="Chat" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        </div>
       </button>
     );
   }
@@ -185,7 +210,7 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
       <div className="chatbot-header">
         <div className="header-info">
             <div className="bot-avatar-header">
-                <span role="img" aria-label="robot">🤖</span>
+                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="Bot" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 <div className="online-indicator"></div>
             </div>
             <div className="header-text">
@@ -202,7 +227,7 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
           <div key={idx} className={`message-wrapper ${msg.sender}`}>
             {msg.sender === 'bot' && (
                 <div className="bot-avatar-message">
-                    <span role="img" aria-label="robot">🤖</span>
+                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="Bot" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 </div>
             )}
             <div className={`message ${msg.sender}`}>

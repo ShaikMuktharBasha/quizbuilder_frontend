@@ -37,7 +37,7 @@ export default function ParticipantDashboard() {
     <div className="participant-dashboard">
       {/* Header */}
       <header className="dashboard-header">
-        <h2>Hello, Participant 👋</h2>
+        <h2>Hello, Participant </h2>
         <div className="header-right">
           <span className="user-name">{username}</span>
           <button className="logout-btn" onClick={handleLogout}>
@@ -49,12 +49,12 @@ export default function ParticipantDashboard() {
       {/* Main Content */}
       <div className="dashboard-content">
         {/* Attempt Quiz */}
-        <div className="action-card small-card">
+        <div className="action-card">
           <h3>Attempt Quiz</h3>
           <p>Take quizzes created by others and test your knowledge.</p>
           <button
             onClick={() => navigate("/attempt-quiz")}
-            className="start-btn"
+            className="action-btn"
           >
             Start Quiz
           </button>
@@ -69,15 +69,15 @@ export default function ParticipantDashboard() {
         </div>
 
         {/* My Results */}
-        <div className="action-card small-card">
+        <div className="action-card">
           <h3>My Results</h3>
           <p>Check your past performance and track your progress.</p>
-          <button onClick={() => navigate("/my-results")}>View Results</button>
+          <button className="action-btn" onClick={() => navigate("/my-results")}>View Results</button>
         </div>
 
         {/* Performance Chart */}
-        <div className="chart-section">
-          <h3>Performance Overview</h3>
+        <div className="chart-section" style={{ gridColumn: "1 / -1", width: "100%", maxWidth: "800px", background: "white", padding: "20px", borderRadius: "16px", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-md)" }}>
+          <h3 style={{ marginBottom: "20px", color: "var(--text-primary)" }}>Performance Overview</h3>
           {results.length > 0 ? (
             <div style={{ width: '100%', height: 300 }}>
               <ResponsiveContainer width="100%" height="100%">
@@ -90,30 +90,20 @@ export default function ParticipantDashboard() {
                     bottom: 5,
                   }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="name" stroke="#fff" />
-                  <YAxis stroke="#fff" />
-                  <Tooltip />
+                  <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                  <XAxis dataKey="name" stroke="#6b7280" />
+                  <YAxis stroke="#6b7280" />
+                  <Tooltip contentStyle={{ backgroundColor: '#fff', borderColor: '#e5e7eb', color: '#111827' }} />
                   <Legend />
-                  <Bar dataKey="score" fill="#8884d8" name="Score" />
-                  <Bar dataKey="total" fill="#82ca9d" name="Total Questions" />
+                  <Bar dataKey="score" fill="#2563eb" name="Score" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="total" fill="#93c5fd" name="Total Questions" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           ) : (
-            <p style={{ color: '#fff' }}>No quiz data available yet.</p>
+            <p style={{ color: "var(--text-secondary)" }}>No results available yet.</p>
           )}
         </div>
-
-        {/* About Participant */}
-        <section className="about-participant">
-          <h4>About Participant</h4>
-          <p>
-            As a participant, you can attempt quizzes created by others,
-            check your scores, and track your progress.
-            Stay active and challenge yourself!
-          </p>
-        </section>
       </div>
     </div>
   );

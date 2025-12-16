@@ -144,59 +144,103 @@ export default function CreateQuiz() {
 
       {/* Step 2: Add/Edit Questions */}
       {step === 2 && (
-        <div className="quiz-questions">
-          <label>Question:</label>
-          <input
-            type="text"
-            value={newQuestion.text}
-            onChange={(e) =>
-              setNewQuestion({ ...newQuestion, text: e.target.value })
-            }
-          />
-
-          {newQuestion.options.map((opt, idx) => (
-            <div key={idx}>
-              <input
-                type="text"
-                value={opt}
-                placeholder={`Option ${String.fromCharCode(65 + idx)}`}
-                onChange={(e) => handleQuestionChange(e, idx)}
-              />
-            </div>
-          ))}
-
-          <label>Correct Answer:</label>
-          <select
-            value={newQuestion.answer}
-            onChange={(e) =>
-              setNewQuestion({ ...newQuestion, answer: e.target.value })
-            }
-          >
-            <option value="">Select</option>
-            <option value="A">Option A</option>
-            <option value="B">Option B</option>
-            <option value="C">Option C</option>
-            <option value="D">Option D</option>
-          </select>
-
-          <div className="buttons">
-            <button onClick={addQuestion}>
-              {editIndex !== null ? "Update Question" : "Add Question"}
-            </button>
-            <button onClick={() => setStep(1)}>← Previous</button>
-            <button onClick={() => setStep(3)}>Next →</button>
+        <div className="quiz-questions-card">
+          <div className="question-header">
+            <span className="question-number">Q{questions.length + 1}</span>
+            <input
+              type="text"
+              className="question-title-input"
+              placeholder="Untitled question"
+              value={newQuestion.text}
+              onChange={(e) =>
+                setNewQuestion({ ...newQuestion, text: e.target.value })
+              }
+            />
           </div>
 
-          <h3>Added Questions:</h3>
-          <ul>
-            {questions.map((q, i) => (
-              <li key={i}>
-                {q.text} (Answer: {q.answer})
-                <button onClick={() => startEdit(i)}>✏️ Edit</button>
-                <button onClick={() => deleteQuestion(i)}>🗑️ Delete</button>
-              </li>
-            ))}
-          </ul>
+          <div className="options-list">
+            {newQuestion.options.map((opt, idx) => {
+                const optionKey = String.fromCharCode(65 + idx); // "A", "B", "C", "D"
+                const isCorrect = newQuestion.answer === optionKey;
+                
+                return (
+                    <div key={idx} className={`option-row ${isCorrect ? 'correct-option' : ''}`}>
+                        <button className="delete-option-btn" title="Clear option" onClick={() => {
+                            const updatedOptions = [...newQuestion.options];
+                            updatedOptions[idx] = "";
+                            setNewQuestion({ ...newQuestion, options: updatedOptions });
+                        }}>
+                            🗑️
+                        </button>
+                        
+                        <input
+                            type="text"
+                            className="option-input"
+                            value={opt}
+                            placeholder={`Option ${optionKey}`}
+                            onChange={(e) => handleQuestionChange(e, idx)}
+                        />
+                        
+                        <div 
+                            className={`correct-toggle ${isCorrect ? 'checked' : ''}`}
+                            onClick={() => setNewQuestion({ ...newQuestion, answer: optionKey })}
+                            title="Mark as correct answer"
+                        >
+                            {isCorrect && <span className="checkmark">✓</span>}
+                        </div>
+                    </div>
+                );
+            })}
+          </div>
+
+          <div className="add-answer-row">
+             <button className="add-answer-btn" disabled>+ Answer (Fixed 4)</button>
+          </div>
+
+          <div className="question-footer">
+             <div className="footer-left">
+                <div className="dropdown-mock">
+                    Single choice ⌄
+                </div>
+             </div>
+             <div className="footer-right">
+                <div className="toggle-switch">
+                    <span className="toggle-label">Required</span>
+                    <div className="switch on"></div>
+                </div>
+                <div className="points-input">
+                    <input type="number" defaultValue={10} /> 
+                    <span>Points</span>
+                </div>
+             </div>
+          </div>
+
+          <div className="action-buttons-row">
+             <button className="secondary-btn" onClick={() => setStep(1)}>Back</button>
+             <button className="primary-btn" onClick={addQuestion}>
+                {editIndex !== null ? "Update" : "Add Question"}
+             </button>
+             {questions.length > 0 && (
+                 <button className="save-btn" onClick={() => setStep(3)}>Review & Save</button>
+             )}
+          </div>
+
+          {questions.length > 0 && (
+            <div className="added-questions-preview">
+                <h3>Added Questions ({questions.length})</h3>
+                <ul className="preview-list">
+                    {questions.map((q, i) => (
+                    <li key={i} className="preview-item">
+                        <span className="preview-text">{i + 1}. {q.text}</span>
+                        <div className="preview-actions">
+                            <button onClick={() => startEdit(i)}>✏️</button>
+                            <button onClick={() => deleteQuestion(i)}>🗑️</button>
+                        </div>
+                    </li>
+                    ))}
+                </ul>
+            </div>
+          )}
         </div>
       )}
 
