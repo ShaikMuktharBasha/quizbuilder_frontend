@@ -166,7 +166,7 @@ export default function CreateQuiz() {
                 
                 return (
                     <div key={idx} className={`option-row ${isCorrect ? 'correct-option' : ''}`}>
-                        <button className="delete-option-btn" title="Clear option" onClick={() => {
+                        <button className="remove-option-btn" title="Clear option" onClick={() => {
                             const updatedOptions = [...newQuestion.options];
                             updatedOptions[idx] = "";
                             setNewQuestion({ ...newQuestion, options: updatedOptions });

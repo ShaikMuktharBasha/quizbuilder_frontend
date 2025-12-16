@@ -312,3 +312,38 @@ body, html, #root {
   color: var(--text-primary);
   font-weight: 500;
 }
+
+/* Correct Answer Toggle */
+.correct-toggle {
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-left: 12px;
+}
+
+.correct-toggle:hover {
+  border-color: var(--primary-color);
+  background-color: #eff6ff;
+}
+
+.correct-toggle.checked {
+  background-color: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.checkmark {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.option-row.correct-option {
+  background-color: #f0fdf4;
+  border-radius: 6px;
+}
