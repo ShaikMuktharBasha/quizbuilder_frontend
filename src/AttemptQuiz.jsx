@@ -8,6 +8,7 @@ export default function AttemptQuiz() {
   const [selectedDomain, setSelectedDomain] = useState(null);
   const [quizzes, setQuizzes] = useState([]);
   const [activeQuiz, setActiveQuiz] = useState(null);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState({});
   const [result, setResult] = useState(null);
   const [timeLeft, setTimeLeft] = useState(null);
@@ -44,6 +45,7 @@ export default function AttemptQuiz() {
     setStep("active");
     setAnswers({});
     setResult(null);
+    setCurrentQuestionIndex(0);
     // Removed timeLimit since it's not in the new schema
     setTimeLeft(null);
   };
@@ -147,53 +149,80 @@ const handleSubmit = async () => {
 
       {/* STEP 4: Active Quiz */}
       {step === "active" && activeQuiz && (
-        <div className="quiz-box">
-          <div className="quiz-header">
-            <button className="back-btn-small" onClick={() => setStep("quizzes")}>
-              ← Back
-            </button>
-            <h2>{activeQuiz.title}</h2>
-            {timeLeft !== null && (
-              <p className="timer">Time left: {formatTime(timeLeft)}</p>
-            )}
+        <div className="quiz-box-centered">
+          <div className="quiz-header-simple">
+             <p className="quiz-instruction">Take the quiz to see your grade.</p>
+          </div>
+
+          {/* Progress Indicator */}
+          <div className="progress-indicator">
+            {activeQuiz.questions.map((_, index) => (
+                <div 
+                    key={index} 
+                    className={`progress-step ${index < currentQuestionIndex ? 'completed' : ''} ${index === currentQuestionIndex ? 'active' : ''}`}
+                >
+                    {index < currentQuestionIndex ? '✓' : index + 1}
+                </div>
+            ))}
           </div>
 
           {activeQuiz.questions.length === 0 ? (
             <p>No questions available for this quiz yet.</p>
           ) : (
-            activeQuiz.questions.map((q) => {
-              const qId = q.id || q._id;
-              const options = [q.optionA, q.optionB, q.optionC, q.optionD];
-              return (
-                <div key={qId} className="quiz-question">
-                  <p className="question-text">{q.questionText}</p>
-                  <div className="options-grid">
-                    {options.map((opt, i) => {
-                      const optionKey = String.fromCharCode(65 + i); // "A", "B", "C", "D"
-                      const isSelected = answers[qId] === optionKey;
-                      return (
-                        <div
-                          key={i}
-                          className={`option-card ${isSelected ? "selected" : ""}`}
-                          onClick={() =>
-                            setAnswers({ ...answers, [qId]: optionKey })
-                          }
-                        >
-                          <span className="option-key">{optionKey}</span>
-                          <span className="option-text">{opt}</span>
+            <div className="question-container">
+                {(() => {
+                    const q = activeQuiz.questions[currentQuestionIndex];
+                    const qId = q.id || q._id;
+                    const options = [q.optionA, q.optionB, q.optionC, q.optionD];
+                    
+                    return (
+                        <div key={qId} className="single-question">
+                            <h3 className="question-text-large">{q.questionText}</h3>
+                            <div className="options-list">
+                                {options.map((opt, i) => {
+                                    const optionKey = String.fromCharCode(65 + i); // "A", "B", "C", "D"
+                                    const isSelected = answers[qId] === optionKey;
+                                    return (
+                                        <label key={i} className={`option-item ${isSelected ? "selected" : ""}`}>
+                                            <input 
+                                                type="radio" 
+                                                name={`question-${qId}`} 
+                                                checked={isSelected}
+                                                onChange={() => setAnswers({ ...answers, [qId]: optionKey })}
+                                            />
+                                            <span className="option-label-text">{opt}</span>
+                                        </label>
+                                    );
+                                })}
+                            </div>
                         </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              );
-            })
+                    );
+                })()}
+            </div>
           )}
-          {activeQuiz.questions.length > 0 && (
-            <button onClick={handleSubmit} className="submit-btn">
-              Submit Quiz
+
+          <div className="quiz-navigation">
+            <button 
+                className="nav-btn prev-btn" 
+                onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
+                disabled={currentQuestionIndex === 0}
+            >
+                Previous
             </button>
-          )}
+            
+            {currentQuestionIndex < activeQuiz.questions.length - 1 ? (
+                <button 
+                    className="nav-btn next-btn" 
+                    onClick={() => setCurrentQuestionIndex(prev => Math.min(activeQuiz.questions.length - 1, prev + 1))}
+                >
+                    Next
+                </button>
+            ) : (
+                <button onClick={handleSubmit} className="nav-btn submit-btn">
+                    Submit
+                </button>
+            )}
+          </div>
         </div>
       )}
 

@@ -194,7 +194,6 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
             </div>
         </div>
         <div className="header-actions">
-            <button className="icon-btn">•••</button>
             <button className="close-btn" onClick={() => setIsOpen(false)}>×</button>
         </div>
       </div>
@@ -221,9 +220,6 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
           onKeyPress={(e) => e.key === 'Enter' && handleSend()}
           placeholder="Reply to LeadBot..."
         />
-        <div className="branding">
-            We're ⚡ by Drift
-        </div>
       </div>
     </div>
   );
