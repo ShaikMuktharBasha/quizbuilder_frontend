@@ -253,9 +253,19 @@ export default function CreatorDashboard() {
                       <div className="stat-value">5 Days</div>
                   </div>
               </div>
+            </div>
+          )}
 
-              {/* Settings Section */}
-              <h3 className="section-title" style={{marginTop: '32px'}}>Settings</h3>
+          {activeTab === "settings" && (
+            <div className="settings-view">
+              <div className="view-header">
+                <div>
+                    <h1 className="view-title">Settings</h1>
+                    <p className="view-subtitle">Manage your application preferences.</p>
+                </div>
+              </div>
+
+              <h3 className="section-title">Flashcard Settings</h3>
               <div className="settings-card">
                   <div className="setting-row">
                       <div className="setting-info">
