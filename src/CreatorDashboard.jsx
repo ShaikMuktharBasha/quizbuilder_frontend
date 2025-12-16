@@ -188,19 +188,15 @@ export default function CreatorDashboard() {
                         <div className={`switch ${showActive ? 'on' : ''}`}></div>
                     </div>
                     <span>Show Active</span>
-                </div> onClick={() => handleEdit(quiz)}><Edit size={16} /></button>
-                                    <button title="Delete" onClick={() => handleDelete(quiz._id || quiz.id)}><Trash2 size={16} /></button>
-                                </div>
-                            </div>
-                            <div className="quiz-card-body">
-                                <div className={`quiz-info-row ${quiz.isActive ? 'success' : ''}`} style={{ cursor: 'pointer' }} onClick={() => handleToggleActive(quiz)} title="Click to toggle active status">
-                                    <span className="info-label">ID</span>
-                                    <span className="info-value">{quiz.quizId}</span>
-                                    {quiz.isActive ? (
-                                      <CheckCircle size={16} className="check-icon" />
-                                    ) : (
-                                      <div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid var(--text-secondary)' }} />
-                                    )}
+                </div>
+                <div className="action-buttons">
+                    <button className="btn-secondary" onClick={() => navigate("/create-quiz")}>
+                        <Eye size={16} />
+                        Preview Mode
+                    </button>
+                    <button className="btn-primary" onClick={() => navigate("/create-quiz")}>
+                        <Plus size={16} />
+                        Create Quiz
                     </button>
                 </div>
               </div>
