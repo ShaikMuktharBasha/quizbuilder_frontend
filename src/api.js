@@ -57,6 +57,12 @@ export async function deleteQuiz(quizId) {
   await axios.delete(`${QUIZ_API_URL}/${quizId}`);
 }
 
+// Update quiz
+export async function updateQuiz(id, data) {
+  const res = await axios.put(`${QUIZ_API_URL}/${id}`, data);
+  return res.data;
+}
+
 // Get one quiz (with questions)
 export async function getQuizById(id) {
   const res = await axios.get(`${QUIZ_API_URL}/${id}`);

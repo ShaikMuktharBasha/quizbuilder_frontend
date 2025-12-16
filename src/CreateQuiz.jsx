@@ -1,19 +1,44 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./CreateQuiz.css";
-import { createQuiz } from "./api";
+import { createQuiz, updateQuiz } from "./api";
 import QuizChatbot from "./QuizChatbot";
 import ThemeToggle from "./components/ThemeToggle";
 
 export default function CreateQuiz() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [step, setStep] = useState(1);
+  const [isEditing, setIsEditing] = useState(false);
+  const [quizId, setQuizId] = useState(null);
 
   // Quiz details
   const [quiz, setQuiz] = useState({
     title: "",
     description: ""
   });
+
+  useEffect(() => {
+    if (location.state?.quizToEdit) {
+      const quizToEdit = location.state.quizToEdit;
+      setIsEditing(true);
+      setQuizId(quizToEdit.id || quizToEdit._id);
+      setQuiz({
+        title: quizToEdit.title,
+        description: quizToEdit.description || ""
+      });
+      
+      if (quizToEdit.questions) {
+        const formattedQuestions = quizToEdit.questions.map(q => ({
+          text: q.questionText,
+          options: [q.optionA, q.optionB, q.optionC, q.optionD],
+          answer: q.correctOption,
+          required: true
+        }));
+        setQuestions(formattedQuestions);
+      }
+    }
+  }, [location.state]);
 
   // Questions
   const [questions, setQuestions] = useState([]);
@@ -105,7 +130,14 @@ export default function CreateQuiz() {
     console.log("Final Payload:", JSON.stringify(payload, null, 2));
 
     try {
-      const saved = await createQuiz(payload);
+      let saved;
+      if (isEditing && quizId) {
+        saved = await updateQuiz(quizId, payload);
+        alert("Quiz updated successfully!");
+      } else {
+        saved = await createQuiz(payload);
+        alert("Quiz created successfully!");
+      }
       setSavedQuiz(saved);
       setStep(4);
     } catch (err) {
@@ -122,7 +154,7 @@ export default function CreateQuiz() {
       <button className="go-back-btn" onClick={() => navigate("/creator")} title="Go Back">
         ←
       </button>
-      <h2>Create Quiz</h2>
+      <h2>{isEditing ? "Edit Quiz" : "Create Quiz"}</h2>
 
       {/* Step 1: Quiz Details */}
       {step === 1 && (

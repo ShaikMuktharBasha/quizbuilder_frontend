@@ -16,7 +16,7 @@ import {
   ChevronDown
 } from "lucide-react";
 import "./CreatorDashboard.css";
-import { getMyQuizzes } from "./api";
+import { getMyQuizzes, deleteQuiz, updateQuiz } from "./api";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 import ThemeToggle from "./components/ThemeToggle";
 
@@ -54,6 +54,33 @@ export default function CreatorDashboard() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this quiz?")) return;
+    try {
+      await deleteQuiz(id);
+      setQuizzes(quizzes.filter(q => q._id !== id && q.id !== id));
+    } catch (err) {
+      console.error("Failed to delete quiz", err);
+      alert("Failed to delete quiz");
+    }
+  };
+
+  const handleToggleActive = async (quiz) => {
+    try {
+      const updatedQuiz = await updateQuiz(quiz._id || quiz.id, { isPublished: !quiz.isPublished });
+      setQuizzes(quizzes.map(q => (q._id === updatedQuiz._id || q.id === updatedQuiz.id) ? updatedQuiz : q));
+    } catch (err) {
+      console.error("Failed to update quiz status", err);
+      alert("Failed to update quiz status");
+    }
+  };
+
+  const handleEdit = (quiz) => {
+    // Navigate to create-quiz with quiz data to edit
+    // Note: CreateQuiz needs to handle location state to populate fields
+    navigate("/create-quiz", { state: { quizToEdit: quiz } });
   };
 
   const handleLogout = () => {
@@ -161,15 +188,19 @@ export default function CreatorDashboard() {
                         <div className={`switch ${showActive ? 'on' : ''}`}></div>
                     </div>
                     <span>Show Active</span>
-                </div>
-                <div className="action-buttons">
-                    <button className="btn-secondary" onClick={() => navigate("/create-quiz")}>
-                        <Eye size={16} />
-                        Preview Mode
-                    </button>
-                    <button className="btn-primary" onClick={() => navigate("/create-quiz")}>
-                        <Plus size={16} />
-                        Create Quiz
+                </div> onClick={() => handleEdit(quiz)}><Edit size={16} /></button>
+                                    <button title="Delete" onClick={() => handleDelete(quiz._id || quiz.id)}><Trash2 size={16} /></button>
+                                </div>
+                            </div>
+                            <div className="quiz-card-body">
+                                <div className={`quiz-info-row ${quiz.isActive ? 'success' : ''}`} style={{ cursor: 'pointer' }} onClick={() => handleToggleActive(quiz)} title="Click to toggle active status">
+                                    <span className="info-label">ID</span>
+                                    <span className="info-value">{quiz.quizId}</span>
+                                    {quiz.isActive ? (
+                                      <CheckCircle size={16} className="check-icon" />
+                                    ) : (
+                                      <div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid var(--text-secondary)' }} />
+                                    )}
                     </button>
                 </div>
               </div>
@@ -188,15 +219,19 @@ export default function CreatorDashboard() {
                                 <span className="quiz-number">{index + 1}.</span>
                                 <h3 className="quiz-title">{quiz.title}</h3>
                                 <div className="card-actions">
-                                    <button title="Edit"><Edit size={16} /></button>
-                                    <button title="Delete"><Trash2 size={16} /></button>
+                                    <button title="Edit" onClick={() => handleEdit(quiz)}><Edit size={16} /></button>
+                                    <button title="Delete" onClick={() => handleDelete(quiz._id || quiz.id)}><Trash2 size={16} /></button>
                                 </div>
                             </div>
                             <div className="quiz-card-body">
-                                <div className="quiz-info-row success">
+                                <div className={`quiz-info-row ${quiz.isPublished ? 'success' : ''}`} style={{ cursor: 'pointer' }} onClick={() => handleToggleActive(quiz)} title="Click to toggle active status">
                                     <span className="info-label">ID</span>
                                     <span className="info-value">{quiz.quizId}</span>
-                                    <CheckCircle size={16} className="check-icon" />
+                                    {quiz.isPublished ? (
+                                      <CheckCircle size={16} className="check-icon" />
+                                    ) : (
+                                      <div style={{ width: 16, height: 16, borderRadius: '50%', border: '2px solid var(--text-secondary)' }} />
+                                    )}
                                 </div>
                                 <div className="quiz-info-row">
                                     <span className="info-label">Q</span>
