@@ -214,19 +214,26 @@ export default function CreatorDashboard() {
                     </div>
                 ) : (
                     quizzes.map((quiz, index) => (
-                        <div key={quiz._id} className="quiz-card-item">
+                        <div key={quiz.id || quiz._id} className="quiz-card-item">
                             <div className="quiz-card-header">
                                 <span className="quiz-number">{index + 1}.</span>
                                 <h3 className="quiz-title">{quiz.title}</h3>
                                 <div className="card-actions">
-                                    <button title="Edit" onClick={() => handleEdit(quiz)}><Edit size={16} /></button>
-                                    <button title="Delete" onClick={() => handleDelete(quiz._id || quiz.id)}><Trash2 size={16} /></button>
+                                    <button title="Edit" onClick={(e) => { e.stopPropagation(); handleEdit(quiz); }}><Edit size={16} /></button>
+                                    <button title="Delete" onClick={(e) => { e.stopPropagation(); handleDelete(quiz.id || quiz._id); }}><Trash2 size={16} /></button>
                                 </div>
                             </div>
                             <div className="quiz-card-body">
-                                <div className={`quiz-info-row ${quiz.isPublished ? 'success' : ''}`} style={{ cursor: 'pointer' }} onClick={() => handleToggleActive(quiz)} title="Click to toggle active status">
+                                <div 
+                                  className={`quiz-info-row ${quiz.isPublished ? 'success' : ''}`} 
+                                  style={{ cursor: 'pointer' }} 
+                                  onClick={(e) => { e.stopPropagation(); handleToggleActive(quiz); }} 
+                                  title="Click to toggle active status"
+                                >
                                     <span className="info-label">ID</span>
-                                    <span className="info-value">{quiz.quizId}</span>
+                                    <span className="info-value" title={quiz.id || quiz._id}>
+                                      {(quiz.id || quiz._id || "").substring(0, 8)}...
+                                    </span>
                                     {quiz.isPublished ? (
                                       <CheckCircle size={16} className="check-icon" />
                                     ) : (
