@@ -29,6 +29,13 @@ export default function CreatorDashboard() {
   const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showActive, setShowActive] = useState(true);
+  
+  // Flashcard Settings State
+  const [flashcardSettings, setFlashcardSettings] = useState({
+    shuffle: false,
+    timer: true,
+    timerDuration: 60
+  });
 
   useEffect(() => {
     if (activeTab === "quizzes") {
@@ -218,6 +225,72 @@ export default function CreatorDashboard() {
                         <div className="stat-value">0</div>
                     </div>
                 </div>
+            </div>
+          )}
+
+          {activeTab === "flashcards" && (
+            <div className="flashcards-view">
+              <div className="view-header">
+                <div>
+                    <h1 className="view-title">Flashcards</h1>
+                    <p className="view-subtitle">Manage your study sets and track progress.</p>
+                </div>
+              </div>
+
+              {/* Statistics Section */}
+              <h3 className="section-title">Statistics</h3>
+              <div className="stats-grid">
+                  <div className="stat-card">
+                      <h3>Sets Created</h3>
+                      <div className="stat-value">3</div>
+                  </div>
+                  <div className="stat-card">
+                      <h3>Cards Mastered</h3>
+                      <div className="stat-value">85%</div>
+                  </div>
+                  <div className="stat-card">
+                      <h3>Study Streak</h3>
+                      <div className="stat-value">5 Days</div>
+                  </div>
+              </div>
+
+              {/* Settings Section */}
+              <h3 className="section-title" style={{marginTop: '32px'}}>Settings</h3>
+              <div className="settings-card">
+                  <div className="setting-row">
+                      <div className="setting-info">
+                          <h4>Shuffle Cards</h4>
+                          <p>Randomize the order of cards during review.</p>
+                      </div>
+                      <div className={`toggle-switch ${flashcardSettings.shuffle ? '' : 'off'}`} onClick={() => setFlashcardSettings({...flashcardSettings, shuffle: !flashcardSettings.shuffle})}>
+                          <div className={`switch ${flashcardSettings.shuffle ? 'on' : ''}`}></div>
+                      </div>
+                  </div>
+                  
+                  <div className="setting-row">
+                      <div className="setting-info">
+                          <h4>Timer</h4>
+                          <p>Enable timer for each card review session.</p>
+                      </div>
+                      <div className={`toggle-switch ${flashcardSettings.timer ? '' : 'off'}`} onClick={() => setFlashcardSettings({...flashcardSettings, timer: !flashcardSettings.timer})}>
+                          <div className={`switch ${flashcardSettings.timer ? 'on' : ''}`}></div>
+                      </div>
+                  </div>
+
+                  {flashcardSettings.timer && (
+                      <div className="setting-row">
+                          <div className="setting-info">
+                              <h4>Timer Duration (seconds)</h4>
+                          </div>
+                          <input 
+                            type="number" 
+                            className="setting-input"
+                            value={flashcardSettings.timerDuration}
+                            onChange={(e) => setFlashcardSettings({...flashcardSettings, timerDuration: parseInt(e.target.value)})}
+                          />
+                      </div>
+                  )}
+              </div>
             </div>
           )}
         </div>
