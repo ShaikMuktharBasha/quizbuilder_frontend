@@ -205,7 +205,7 @@ export default function CreateQuiz() {
                 </div>
              </div>
              <div className="footer-right">
-                <div className="toggle-group" style={{display: 'flex', alignItems: 'center', gap: '10px', cursor: 'pointer'}} onClick={() => setNewQuestion({...newQuestion, required: !newQuestion.required})}>
+                <div className="toggle-group" onClick={() => setNewQuestion({...newQuestion, required: !newQuestion.required})}>
                     <span className="toggle-label">Required</span>
                     <div className={`toggle-switch ${newQuestion.required ? '' : 'off'}`}>
                         <div className={`switch ${newQuestion.required ? 'on' : ''}`}></div>
