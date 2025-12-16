@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import "./CreatorDashboard.css";
 import { getMyQuizzes } from "./api";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 export default function CreatorDashboard() {
   const navigate = useNavigate();
@@ -300,6 +301,66 @@ export default function CreatorDashboard() {
                           />
                       </div>
                   )}
+              </div>
+            </div>
+          )}
+
+          {activeTab === "statistics" && (
+            <div className="statistics-view">
+              <div className="view-header">
+                <div>
+                    <h1 className="view-title">Statistics</h1>
+                    <p className="view-subtitle">Analyze participant performance and quiz engagement.</p>
+                </div>
+              </div>
+
+              <div className="stats-grid">
+                  <div className="stat-card">
+                      <h3>Total Participants</h3>
+                      <div className="stat-value">76</div>
+                  </div>
+                  <div className="stat-card">
+                      <h3>Avg. Completion Rate</h3>
+                      <div className="stat-value">82%</div>
+                  </div>
+                  <div className="stat-card">
+                      <h3>Top Performing Quiz</h3>
+                      <div className="stat-value">React Basics</div>
+                  </div>
+              </div>
+
+              <div className="chart-section" style={{ marginTop: "32px", background: "white", padding: "24px", borderRadius: "12px", border: "1px solid var(--border-color)", boxShadow: "var(--shadow-sm)" }}>
+                <h3 className="section-title">Performance Overview</h3>
+                <div style={{ width: '100%', height: 400 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart
+                      data={[
+                        { name: 'Quiz 1', avgScore: 85, participants: 12 },
+                        { name: 'Quiz 2', avgScore: 72, participants: 19 },
+                        { name: 'Quiz 3', avgScore: 90, participants: 8 },
+                        { name: 'Quiz 4', avgScore: 65, participants: 15 },
+                        { name: 'Quiz 5', avgScore: 78, participants: 22 },
+                      ]}
+                      margin={{
+                        top: 20,
+                        right: 30,
+                        left: 20,
+                        bottom: 5,
+                      }}
+                    >
+                      <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+                      <XAxis dataKey="name" stroke="#6b7280" />
+                      <YAxis stroke="#6b7280" />
+                      <Tooltip 
+                        contentStyle={{ backgroundColor: '#fff', borderColor: '#e5e7eb', color: '#111827' }}
+                        cursor={{ fill: '#f3f4f6' }}
+                      />
+                      <Legend />
+                      <Bar dataKey="avgScore" name="Average Score (%)" fill="#2563eb" radius={[4, 4, 0, 0]} />
+                      <Bar dataKey="participants" name="Participants" fill="#93c5fd" radius={[4, 4, 0, 0]} />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             </div>
           )}
