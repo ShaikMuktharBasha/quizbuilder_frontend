@@ -142,9 +142,6 @@ export default function CreatorDashboard() {
             <span className="classroom-name">{username}'s Classroom</span>
             <ChevronDown size={14} />
           </div>
-          <div className="header-actions">
-            <div className="user-avatar">{username.charAt(0).toUpperCase()}</div>
-          </div>
         </header>
 
         {/* Content Area */}
