@@ -195,7 +195,7 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
         </div>
         <div className="header-actions">
             <button className="close-btn" onClick={() => setIsOpen(false)} aria-label="Close Chat">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
