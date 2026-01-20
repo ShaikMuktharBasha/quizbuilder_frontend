@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { generateQuizQuestions } from './api';
 import './QuizChatbot.css';
 
 export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, setStep }) {
@@ -26,6 +27,28 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
 
   const addMessage = (text, sender) => {
     setMessages(prev => [...prev, { text, sender }]);
+  };
+
+  const handleGeneration = async (topic) => {
+    try {
+        const generated = await generateQuizQuestions(topic, 'Medium', 5);
+        if (Array.isArray(generated)) {
+            const formatted = generated.map(q => ({
+                text: q.questionText,
+                options: q.options || [q.optionA, q.optionB, q.optionC, q.optionD],
+                answer: q.correctOption
+            }));
+            setQuestions(prev => [...prev, ...formatted]);
+            addMessage(`Successfully added ${generated.length} questions on "${topic}"! You can review them or add more manually.`, 'bot');
+            setStep(2); // Ensure we are on questions/review step
+            setChatState('CONFIRM_NEXT');
+        } else {
+            addMessage("Received unexpected format from AI.", 'bot');
+        }
+    } catch (error) {
+        console.error("Generation error:", error);
+        addMessage("Sorry, I couldn't generate questions at this moment. Please try again or switch to manual mode.", 'bot');
+    }
   };
 
   const handleSend = () => {
@@ -82,9 +105,25 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
 
       case 'GET_DESCRIPTION':
         setQuiz(prev => ({ ...prev, description: text }));
-        addMessage("Awesome. Let's add the first question. What is the question text?", 'bot');
-        setChatState('GET_QUESTION_TEXT');
-        setStep(2); // Move UI to questions step
+        addMessage("Awesome. Now, how would you like to add questions?\n1. Type 'manual' to add them yourself.\n2. Type 'generate <topic>' (e.g., 'generate space') to auto-create questions.", 'bot');
+        setChatState('CHOOSE_MODE');
+        break;
+
+      case 'CHOOSE_MODE':
+        if (lowerText.startsWith("generate")) {
+            const topic = text.replace(/^generate\s*/i, "").trim();
+            if (!topic) {
+                addMessage("Please specify a topic. Example: 'generate science'", 'bot');
+            } else {
+                addMessage(`Generating questions on "${topic}"... Please wait.`, 'bot');
+                handleGeneration(topic);
+            }
+        } else {
+            // Default to manual
+            addMessage("Okay. What is the first question text?", 'bot');
+            setChatState('GET_QUESTION_TEXT');
+            setStep(2);
+        }
         break;
 
       case 'GET_QUESTION_TEXT':
@@ -198,8 +237,11 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
   if (!isOpen) {
     return (
       <button className="chatbot-toggle" onClick={() => setIsOpen(true)}>
-        <div style={{ width: '100%', height: '100%', borderRadius: '50%', overflow: 'hidden' }}>
-            <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="Chat" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+        <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {/* Using the RobotIconSimple or just an SVG for chat */}
+             <svg width="30" height="30" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+                <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H6L4 18V4H20V16Z" fill="white"/>
+            </svg>
         </div>
       </button>
     );
@@ -210,7 +252,14 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
       <div className="chatbot-header">
         <div className="header-info">
             <div className="bot-avatar-header">
-                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="Bot" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                {/* Use SVG instead of img for crisp look */}
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C13.1046 2 14 2.89543 14 4V6H10V4C10 2.89543 10.8954 2 12 2Z" fill="white"/>
+                    <rect x="4" y="6" width="16" height="12" rx="4" fill="white"/>
+                    <circle cx="9" cy="11" r="1.5" fill="#9b51e0"/>
+                    <circle cx="15" cy="11" r="1.5" fill="#9b51e0"/>
+                    <path d="M12 22L8 18H16L12 22Z" fill="white"/>
+                </svg>
                 <div className="online-indicator"></div>
             </div>
             <div className="header-text">
@@ -219,7 +268,12 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
             </div>
         </div>
         <div className="header-actions">
-            <button className="close-btn" onClick={() => setIsOpen(false)}>×</button>
+            <button className="close-btn" onClick={() => setIsOpen(false)} aria-label="Close Chat">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+            </button>
         </div>
       </div>
       <div className="chatbot-messages">
