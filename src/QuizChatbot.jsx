@@ -5,14 +5,14 @@ import './QuizChatbot.css';
 export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, setStep }) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
-    { text: "Hi! I'm your Quiz Assistant. I can help you build your quiz. Let's start! What is the title of your quiz?", sender: 'bot' }
+    { text: "Hi! I'm your AI Quiz Assistant. I can help you generate a quiz instantly. What topic would you like the quiz to be about?", sender: 'bot' }
   ]);
   const [inputValue, setInputValue] = useState("");
-  const [chatState, setChatState] = useState('GET_TITLE'); 
-  const [currentQuestion, setCurrentQuestion] = useState({
-    text: "",
-    options: ["", "", "", ""],
-    answer: ""
+  const [chatState, setChatState] = useState('GET_TOPIC'); 
+  const [generationParams, setGenerationParams] = useState({
+      topic: "",
+      count: 5,
+      difficulty: "Medium"
   });
   
   const messagesEndRef = useRef(null);
@@ -29,9 +29,9 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
     setMessages(prev => [...prev, { text, sender }]);
   };
 
-  const handleGeneration = async (topic) => {
+  const handleGeneration = async (topic, difficulty, count) => {
     try {
-        const generated = await generateQuizQuestions(topic, 'Medium', 5);
+        const generated = await generateQuizQuestions(topic, difficulty, count);
         if (Array.isArray(generated)) {
             const formatted = generated.map(q => ({
                 text: q.questionText,
@@ -39,15 +39,17 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
                 answer: q.correctOption
             }));
             setQuestions(prev => [...prev, ...formatted]);
-            addMessage(`Successfully added ${generated.length} questions on "${topic}"! You can review them or add more manually.`, 'bot');
-            setStep(2); // Ensure we are on questions/review step
-            setChatState('CONFIRM_NEXT');
+            addMessage(`Successfully added ${generated.length} questions on "${topic}"! You can review them in the editor.`, 'bot');
+            
+            // Optionally, we could ask if they want to generate more or close.
+            addMessage("Do you want to generate more questions? (Type 'yes' to start over, or 'no' to close chat)", 'bot');
+            setChatState('CONFIRM_RESTART');
         } else {
             addMessage("Received unexpected format from AI.", 'bot');
         }
     } catch (error) {
         console.error("Generation error:", error);
-        addMessage("Sorry, I couldn't generate questions at this moment. Please try again or switch to manual mode.", 'bot');
+        addMessage("Sorry, I couldn't generate questions at this moment. Please try again.", 'bot');
     }
   };
 
@@ -66,149 +68,69 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
 
     // Global commands / Interrupts
     if (lowerText.includes("restart") || lowerText.includes("start over")) {
-      setChatState('GET_TITLE');
-      setQuiz({ title: "", description: "" });
-      setQuestions([]);
-      addMessage("Okay, let's start over. What is the title of your quiz?", 'bot');
+      setChatState('GET_TOPIC');
+      setGenerationParams({ topic: "", count: 5, difficulty: "Medium" });
+      addMessage("Okay, let's start over. What topic would you like the quiz to be about?", 'bot');
       return;
-    }
-
-    if (lowerText.startsWith("change title to ")) {
-        const newTitle = text.substring(16);
-        setQuiz(prev => ({ ...prev, title: newTitle }));
-        addMessage(`Updated title to: "${newTitle}"`, 'bot');
-        return;
-    }
-
-    if (lowerText.startsWith("change description to ")) {
-        const newDesc = text.substring(22);
-        setQuiz(prev => ({ ...prev, description: newDesc }));
-        addMessage(`Updated description to: "${newDesc}"`, 'bot');
-        return;
-    }
-
-    // Allow modifying the current question being built
-    if (lowerText.startsWith("change question to ")) {
-        const newText = text.substring(19);
-        setCurrentQuestion(prev => ({ ...prev, text: newText }));
-        addMessage(`Updated question text to: "${newText}". Continue with options?`, 'bot');
-        return;
     }
 
     // State machine
     switch (chatState) {
-      case 'GET_TITLE':
-        setQuiz(prev => ({ ...prev, title: text }));
-        addMessage("Great! Now, give me a short description for the quiz.", 'bot');
-        setChatState('GET_DESCRIPTION');
+      case 'GET_TOPIC':
+        setGenerationParams(prev => ({ ...prev, topic: text }));
+        addMessage(`Great! How many questions should I generate? (Max 10)`, 'bot');
+        setChatState('GET_COUNT');
         break;
 
-      case 'GET_DESCRIPTION':
-        setQuiz(prev => ({ ...prev, description: text }));
-        addMessage("Awesome. Now, how would you like to add questions?\n1. Type 'manual' to add them yourself.\n2. Type 'generate <topic>' (e.g., 'generate space') to auto-create questions.", 'bot');
-        setChatState('CHOOSE_MODE');
-        break;
-
-      case 'CHOOSE_MODE':
-        if (lowerText.startsWith("generate")) {
-            const topic = text.replace(/^generate\s*/i, "").trim();
-            if (!topic) {
-                addMessage("Please specify a topic. Example: 'generate science'", 'bot');
-            } else {
-                addMessage(`Generating questions on "${topic}"... Please wait.`, 'bot');
-                handleGeneration(topic);
-            }
+      case 'GET_COUNT':
+        const count = parseInt(text);
+        if (isNaN(count) || count < 1 || count > 10) {
+            addMessage("Please enter a valid number between 1 and 10.", 'bot');
         } else {
-            // Default to manual
-            addMessage("Okay. What is the first question text?", 'bot');
-            setChatState('GET_QUESTION_TEXT');
-            setStep(2);
+            setGenerationParams(prev => ({ ...prev, count: count }));
+            addMessage("Got it. What difficulty level would you like? (Easy, Medium, Hard)", 'bot');
+            setChatState('GET_DIFFICULTY');
         }
         break;
 
-      case 'GET_QUESTION_TEXT':
-        setCurrentQuestion(prev => ({ ...prev, text: text }));
-        addMessage("Okay. What is Option A?", 'bot');
-        setChatState('GET_OPTION_A');
-        break;
-
-      case 'GET_OPTION_A':
-        updateOption(0, text);
-        addMessage("What is Option B?", 'bot');
-        setChatState('GET_OPTION_B');
-        break;
-
-      case 'GET_OPTION_B':
-        updateOption(1, text);
-        addMessage("What is Option C?", 'bot');
-        setChatState('GET_OPTION_C');
-        break;
-
-      case 'GET_OPTION_C':
-        updateOption(2, text);
-        addMessage("What is Option D?", 'bot');
-        setChatState('GET_OPTION_D');
-        break;
-
-      case 'GET_OPTION_D':
-        updateOption(3, text);
-        addMessage("Which option is correct? (A, B, C, or D)", 'bot');
-        setChatState('GET_ANSWER');
-        break;
-
-      case 'GET_ANSWER':
-        const answer = text.toUpperCase();
-        if (['A', 'B', 'C', 'D'].includes(answer)) {
-          const finalQuestion = { ...currentQuestion, answer };
-          setQuestions(prev => [...prev, finalQuestion]);
-          
-          // Reset current question
-          setCurrentQuestion({ text: "", options: ["", "", "", ""], answer: "" });
-          
-          addMessage("Question added! Do you want to add another question? (Type 'yes' or the next question text, or 'no' to finish)", 'bot');
-          setChatState('CONFIRM_NEXT');
+      case 'GET_DIFFICULTY':
+        const validDifficulties = ['easy', 'medium', 'hard'];
+        if (validDifficulties.includes(lowerText)) {
+            // Capitalize first letter for display/API
+            const difficulty = text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+            setGenerationParams(prev => ({ ...prev, difficulty: difficulty }));
+            
+            addMessage(`Generating ${generationParams.count} ${difficulty} questions on "${generationParams.topic}"... Please wait.`, 'bot');
+            handleGeneration(generationParams.topic, difficulty, generationParams.count);
+            setChatState('GENERATING'); // Temporary state
         } else {
-          addMessage("Please enter a valid option: A, B, C, or D.", 'bot');
+            addMessage("Please choose a valid difficulty: Easy, Medium, or Hard.", 'bot');
         }
         break;
 
-      case 'CONFIRM_NEXT':
-        if (lowerText === 'no' || lowerText.includes('finish') || lowerText.includes('done')) {
-          addMessage("Quiz creation complete! Please review your quiz and click 'Save Quiz' in the main window.", 'bot');
-          setStep(3); // Move to review step
-          setChatState('IDLE');
-        } else if (lowerText === 'yes') {
-             addMessage("Okay, what is the next question text?", 'bot');
-             setChatState('GET_QUESTION_TEXT');
+      case 'CONFIRM_RESTART':
+        if (lowerText === 'yes') {
+            setChatState('GET_TOPIC');
+            addMessage("Okay, what topic would you like the quiz to be about?", 'bot');
+        } else if (lowerText === 'no') {
+            addMessage("Goodbye! Happy quizzing.", 'bot');
+            setTimeout(() => setIsOpen(false), 2000);
         } else {
-            // Assume they typed the question text directly
-            setCurrentQuestion(prev => ({ ...prev, text: text }));
-            addMessage("Okay. What is Option A?", 'bot');
-            setChatState('GET_OPTION_A');
+             addMessage("Please reply 'yes' or 'no'.", 'bot');
         }
         break;
-        
-      case 'IDLE':
-        if (lowerText.includes("add question")) {
-             addMessage("Okay, what is the question text?", 'bot');
-             setChatState('GET_QUESTION_TEXT');
-             setStep(2);
-        } else {
-            addMessage("I'm listening. You can say 'add question' to add more, or modify existing questions manually.", 'bot');
-        }
+
+      case 'GENERATING':
+        addMessage("I am currently generating your quiz. Please wait a moment.", 'bot');
         break;
 
       default:
-        addMessage("I'm not sure what you mean. Let's continue.", 'bot');
+        addMessage("I'm not sure what you mean. We can start over if you type 'restart'.", 'bot');
     }
   };
 
   const updateOption = (index, text) => {
-    setCurrentQuestion(prev => {
-      const newOptions = [...prev.options];
-      newOptions[index] = text;
-      return { ...prev, options: newOptions };
-    });
+    // Deprecated for chatbot, but kept if needed for other components
   };
 
   const RobotIcon = () => (
