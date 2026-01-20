@@ -135,24 +135,25 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
 
   const RobotIcon = () => (
     <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="50" cy="50" r="50" fill="#0066FF"/>
-      <path d="M50 20C50 17.2386 52.2386 15 55 15C57.7614 15 60 17.2386 60 20V28H40V20C40 17.2386 42.2386 15 45 15C47.7614 15 50 17.2386 50 20Z" fill="white"/>
-      <rect x="25" y="28" width="50" height="40" rx="10" fill="white"/>
-      <circle cx="40" cy="45" r="5" fill="#0066FF"/>
-      <circle cx="60" cy="45" r="5" fill="#0066FF"/>
-      <path d="M50 15L50 28" stroke="white" strokeWidth="4"/>
-      <circle cx="50" cy="15" r="4" fill="white"/>
-      <path d="M50 75L35 60H65L50 75Z" fill="white"/>
+      <defs>
+        <linearGradient id="botGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#4F46E5" />
+          <stop offset="100%" stopColor="#7C3AED" />
+        </linearGradient>
+      </defs>
+      <circle cx="50" cy="50" r="45" fill="url(#botGradient)"/>
+      <path d="M35 45C35 42.2 37.2 40 40 40C42.8 40 45 42.2 45 45V55C45 57.8 42.8 60 40 60C37.2 60 35 57.8 35 55V45Z" fill="white"/>
+      <path d="M55 45C55 42.2 57.2 40 60 40C62.8 40 65 42.2 65 45V55C65 57.8 62.8 60 60 60C57.2 60 55 57.8 55 55V45Z" fill="white"/>
+      <path d="M40 70C40 70 45 75 50 75C55 75 60 70 60 70" stroke="white" strokeWidth="4" strokeLinecap="round"/>
     </svg>
   );
 
   const RobotIconSimple = () => (
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M12 2C13.1046 2 14 2.89543 14 4V6H10V4C10 2.89543 10.8954 2 12 2Z" fill="currentColor"/>
-        <rect x="4" y="6" width="16" height="12" rx="4" fill="currentColor"/>
-        <circle cx="9" cy="11" r="1.5" fill="white"/>
-        <circle cx="15" cy="11" r="1.5" fill="white"/>
-        <path d="M12 22L8 18H16L12 22Z" fill="currentColor"/>
+        <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2"/>
+        <path d="M8 10H10V14H8V10Z" fill="currentColor"/>
+        <path d="M14 10H16V14H14V10Z" fill="currentColor"/>
+        <path d="M9 17C9 17 10.5 19 12 19C13.5 19 15 17 15 17" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
     </svg>
   );
 
@@ -160,12 +161,12 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
     return (
       <div className="chatbot-closed-wrapper">
          <div className="chatbot-tooltip" onClick={() => setIsOpen(true)}>
-            <span>✨ Generate Quiz with AI</span>
+            <span>👋 Need help using Quiz Builder?</span>
          </div>
          <button className="chatbot-toggle" onClick={() => setIsOpen(true)}>
-            <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <svg width="30" height="30" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2ZM20 16H6L4 18V4H20V16Z" fill="white"/>
+            <div className="toggle-icon">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                 </svg>
             </div>
          </button>
@@ -178,24 +179,16 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
       <div className="chatbot-header">
         <div className="header-info">
             <div className="bot-avatar-header">
-                {/* Use SVG instead of img for crisp look */}
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2C13.1046 2 14 2.89543 14 4V6H10V4C10 2.89543 10.8954 2 12 2Z" fill="white"/>
-                    <rect x="4" y="6" width="16" height="12" rx="4" fill="white"/>
-                    <circle cx="9" cy="11" r="1.5" fill="#9b51e0"/>
-                    <circle cx="15" cy="11" r="1.5" fill="#9b51e0"/>
-                    <path d="M12 22L8 18H16L12 22Z" fill="white"/>
-                </svg>
-                <div className="online-indicator"></div>
+                <RobotIconSimple />
             </div>
             <div className="header-text">
-                <h3>LeadBot</h3>
-                <span className="status">Online Now</span>
+                <h3>Quiz Assistant</h3>
+                <span className="status">● Online</span>
             </div>
         </div>
         <div className="header-actions">
             <button className="close-btn" onClick={() => setIsOpen(false)} aria-label="Close Chat">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
                     <line x1="6" y1="6" x2="18" y2="18"></line>
                 </svg>
@@ -207,7 +200,7 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
           <div key={idx} className={`message-wrapper ${msg.sender}`}>
             {msg.sender === 'bot' && (
                 <div className="bot-avatar-message">
-                    <img src="https://cdn-icons-png.flaticon.com/512/4712/4712027.png" alt="Bot" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                   <RobotIconSimple />
                 </div>
             )}
             <div className={`message ${msg.sender}`}>
@@ -223,8 +216,14 @@ export default function QuizChatbot({ quiz, setQuiz, questions, setQuestions, se
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyPress={(e) => e.key === 'Enter' && handleSend()}
-          placeholder="Reply to LeadBot..."
+          placeholder="Type your message..."
         />
+        <button className="send-btn" onClick={handleSend} disabled={!inputValue.trim()}>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        </button>
       </div>
     </div>
   );
